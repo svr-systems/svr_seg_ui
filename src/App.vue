@@ -1,55 +1,106 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <SideBar v-if="login.auth" :drawer.sync="drawer" />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+    <v-app-bar v-if="login.auth" app color="blue darken-3" dense dark>
+      <v-app-bar-nav-icon class="white--text" @click="drawer = true" />
+
+      <div class="d-flex align-center">
+        <v-toolbar-title>
+          {{ title }}
+        </v-toolbar-title>
       </div>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-tooltip left>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon dark @click="logoutAction">
+            <v-icon> mdi-logout-variant </v-icon>
+          </v-btn>
+        </template>
+        <span v-text="'Cerrar sesión'" />
+      </v-tooltip>
     </v-app-bar>
 
     <v-main>
-      <router-view/>
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
+
+    <v-footer v-if="login.auth" app padless>
+      <v-row dense>
+        <v-col cols="6">
+          <small v-text="login.email" class="pl-1 font-weight-bold" />
+        </v-col>
+        <v-col cols="6" class="text-right">
+          <small v-text="version" class="pr-1" />
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
+import Axios from "axios";
+import { URL_API, headers, msgConfirm, msgAlert } from "./control";
+import SideBar from "./components/SideBar.vue";
 
 export default {
-  name: 'App',
+  components: {
+    SideBar,
+  },
 
-  data: () => ({
-    //
-  }),
+  data() {
+    return {
+      drawer: false,
+      login: this.$store.getters.getLogin,
+      title: "SVR-SDC",
+      version: "Versión 1.23.00.00",
+    };
+  },
+
+  methods: {
+    logout() {
+      this.$store.dispatch("logOutAction");
+      window.location.assign("/inicio_sesion");
+    },
+    logoutAction() {
+      this.$swal
+        .fire(msgConfirm("¿Confirma cerrar la sesión?"))
+        .then((resp) => {
+          if (resp.isConfirmed) {
+            Axios.get(`${URL_API}/auth/logout`, headers(this.login.token))
+              .then((resp) => {
+                if (resp.data.success) {
+                  this.logout();
+                } else {
+                  this.$swal.fire(msgAlert("error", resp.data.message));
+                }
+              })
+              .catch((e) => {
+                this.logout();
+              });
+          }
+        });
+    },
+  },
 };
 </script>
+
+<style>
+.toolbar {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
+.v-main {
+  background-color: #f8f9fa;
+}
+
+.swal2-html-container,
+.swal2-styled {
+  font-family: "Roboto" !important;
+}
+</style>
