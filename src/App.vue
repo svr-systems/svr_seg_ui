@@ -2,7 +2,7 @@
   <v-app>
     <SideBar v-if="login.auth" :drawer.sync="drawer" />
 
-    <v-app-bar v-if="login.auth" app color="blue darken-3" dense dark>
+    <v-app-bar v-if="login.auth" app color="grey darken-4" dense dark>
       <v-app-bar-nav-icon class="white--text" @click="drawer = true" />
 
       <div class="d-flex align-center">
@@ -56,7 +56,7 @@ export default {
     return {
       drawer: false,
       login: this.$store.getters.getLogin,
-      title: "SVR-SDC",
+      title: "FESSTIVA",
       version: "Versión 1.23.00.00",
     };
   },
@@ -96,7 +96,7 @@ export default {
 }
 
 .v-main {
-  background-color: #f8f9fa;
+  background-color: #fcfcfc;
 }
 
 .swal2-html-container,

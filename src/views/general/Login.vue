@@ -10,6 +10,8 @@
             <v-row>
               <v-col cols="12" class="text-center">
                 <img height="55" :src="require('@/assets/logo.png')" />
+                <br />
+                <small>FESSTIVA</small>
               </v-col>
             </v-row>
           </v-card-title>
@@ -47,7 +49,8 @@
                     <v-col cols="12" class="text-right">
                       <v-btn
                         block
-                        color="info"
+                        dark
+                        color="grey darken-4"
                         :loading="loading"
                         @click.prevent="submitForm"
                       >
