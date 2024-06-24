@@ -9,24 +9,13 @@
           height="90"
         />
       </v-col>
-
-      <v-col cols="12" class="mb-4">
-        <h1 class="display-1 font-weight-bold mb-3" v-text="'Bienvenido'" />
-
-        <p class="subheading font-weight-regular">
-          <span v-text="login.email" />
-        </p>
+      <v-col cols="12">
+        <h1 class="display-1 font-weight-bold mb-3">Bienvenido</h1>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      login: this.$store.getters.getLogin,
-    };
-  },
-};
+export default {};
 </script>

@@ -3,8 +3,8 @@ export const URL_API = `${URL}/api`
 
 export const headers = token => {
   let headers = {
-    //'Content-Type': 'application/json',
-    'Content-Type': 'multipart/form-data',
+    'Content-Type': 'application/json',
+    //'Content-Type': 'multipart/form-data',
     'X-Requested-With': 'XMLHttpRequest',
   }
 
@@ -85,7 +85,7 @@ export const rules = () => {
     password: [
       (v) => !!v || 'Campo requerido.',
       (v) => (v && v.length >= 8) || 'Mínimo 8 caracteres.',
-      (v) => (v && v.length <= 20) || 'Máximo 20 caracteres.',
+      (v) => (v && v.length <= 15) || 'Máximo 15 caracteres.',
       (v) => /(?=.*[A-Z])/.test(v) || 'Al menos una mayúscula.',
       (v) => /(?=.*[a-z])/.test(v) || 'Al menos una minúscula.',
       (v) => /(?=.*\d)/.test(v) || 'Al menos un número.',
@@ -108,6 +108,10 @@ export const rules = () => {
     ],
     required: [
       (v) => !!v || "Campo requerido.",
+    ],
+    username: [
+      (v) => !!v || 'Campo requerido.',
+      (v) => /^[A-Za-z0-9\-]*$/.test(v) || 'Solo caracteres alfanuméricos y guión medio'
     ],
   }
 }

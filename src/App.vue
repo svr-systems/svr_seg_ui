@@ -2,8 +2,8 @@
   <v-app>
     <SideBar v-if="login.auth" :drawer.sync="drawer" />
 
-    <v-app-bar v-if="login.auth" app color="grey darken-4" dense dark>
-      <v-app-bar-nav-icon class="white--text" @click="drawer = true" />
+    <v-app-bar v-if="login.auth" app dense>
+      <v-app-bar-nav-icon @click="drawer = true" />
 
       <div class="d-flex align-center">
         <v-toolbar-title>
@@ -15,7 +15,7 @@
 
       <v-tooltip left>
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon dark @click="logoutAction">
+          <v-btn v-on="on" icon @click="logoutAction">
             <v-icon> mdi-logout-variant </v-icon>
           </v-btn>
         </template>
@@ -29,13 +29,17 @@
       </v-container>
     </v-main>
 
-    <v-footer v-if="login.auth" app padless>
-      <v-row dense>
+    <v-footer app padless>
+      <v-row>
         <v-col cols="6">
-          <small v-text="login.email" class="pl-1 font-weight-bold" />
+          <small v-if="login.auth" class="pl-1">
+            {{ login.user.username }}
+          </small>
         </v-col>
         <v-col cols="6" class="text-right">
-          <small v-text="version" class="pr-1" />
+          <small class="pr-1">
+            {{ version }}
+          </small>
         </v-col>
       </v-row>
     </v-footer>
@@ -56,8 +60,8 @@ export default {
     return {
       drawer: false,
       login: this.$store.getters.getLogin,
-      title: "FESSTIVA",
-      version: "Versión 1.23.00.00",
+      title: "SVR-SEG",
+      version: "v1.24.06.17",
     };
   },
 
@@ -90,15 +94,12 @@ export default {
 </script>
 
 <style>
-.toolbar {
-  border-top-left-radius: 0px !important;
-  border-top-right-radius: 0px !important;
+.theme--dark.v-application {
+  background: #1e1e1e !important;
 }
-
-.v-main {
-  background-color: #fcfcfc;
+.v-tooltip__content {
+  font-size: 13px !important;
 }
-
 .swal2-html-container,
 .swal2-styled {
   font-family: "Roboto" !important;

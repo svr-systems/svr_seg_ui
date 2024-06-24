@@ -5,30 +5,49 @@ import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
+  //users
+  {
+    path: '/usuarios',
+    name: 'users',
+    component: () => import('../views/users/Index.vue'),
+    meta: {
+      title: 'USUARIOS',
+      requiresAuth: true,
+      permission: true
+    }
+  },
   //general
   {
     path: '/',
     name: 'main',
     component: () => import('../views/general/Main.vue'),
-    meta: { title: 'Sinergia Médica' }
+    meta: { title: 'SVR' }
   },
   {
     path: '/inicio_sesion',
     name: 'login',
     component: () => import('../views/general/Login.vue'),
-    meta: { title: 'Inicio de sesión' }
+    meta: { title: 'INICIAR SESIÓN' }
   },
   {
     path: '/inicio',
     name: 'home',
     component: () => import('../views/general/Home.vue'),
-    meta: { title: 'Inicio', requiresAuth: true, permission: true }
+    meta: {
+      title: 'INICIO',
+      requiresAuth: true,
+      permission: true
+    }
   },
   {
     path: '/acceso_denegado',
     name: 'unauthorized',
     component: () => import('../views/general/Unauthorized.vue'),
-    meta: { title: 'Acceso denegado', requiresAuth: true, permission: true },
+    meta: {
+      title: 'ACCESO DENEGADO',
+      requiresAuth: true,
+      permission: true
+    },
   },
   {
     path: '/:pathMatch(.*)*',

@@ -11,57 +11,45 @@
               <v-col cols="12" class="text-center">
                 <img height="55" :src="require('@/assets/logo.png')" />
                 <br />
-                <small>FESSTIVA</small>
+                <small>SVR-SEG</small>
               </v-col>
             </v-row>
           </v-card-title>
           <v-card-text>
-            <v-row dense>
-              <v-col cols="12">
-                <v-form ref="form_data" lazy-validation>
-                  <v-row dense>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Nombre de usuario"
-                        v-model="data.email"
-                        type="text"
-                        maxlength="50"
-                        :rules="rules.required"
-                        :disabled="loading"
-                        prepend-icon="mdi-account"
-                        @keyup.enter="submitForm"
-                      />
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Contraseña"
-                        v-model="data.password"
-                        :type="password_show ? 'text' : 'password'"
-                        maxlength="50"
-                        :rules="rules.required"
-                        :disabled="loading"
-                        prepend-icon="mdi-lock"
-                        @keyup.enter="submitForm"
-                        :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'"
-                        @click:append="password_show = !password_show"
-                      />
-                    </v-col>
-                    <v-col cols="12" class="text-right">
-                      <v-btn
-                        block
-                        dark
-                        color="grey darken-4"
-                        :loading="loading"
-                        @click.prevent="submitForm"
-                      >
-                        <v-icon left v-text="'mdi-check'" />
-                        Iniciar Sesión
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-col>
-            </v-row>
+            <v-form ref="password_form" lazy-validation>
+              <v-row dense>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Nombre de usuario"
+                    v-model="password.email"
+                    dense
+                    type="text"
+                    :rules="rules.required"
+                    maxlength="50"
+                    prepend-icon="mdi-account"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Contraseña"
+                    v-model="password.password"
+                    dense
+                    :type="password_show ? 'text' : 'password'"
+                    :rules="rules.required"
+                    maxlength="50"
+                    prepend-icon="mdi-lock"
+                    :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="password_show = !password_show"
+                  />
+                </v-col>
+                <v-col cols="12" class="text-right">
+                  <v-btn block small color="warning" @click.prevent="logIn">
+                    Iniciar Sesión
+                    <v-icon small right> mdi-send </v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-col>
@@ -77,7 +65,7 @@ export default {
   data: () => ({
     loading: false,
     password_show: false,
-    data: {
+    password: {
       email: "",
       password: "",
     },
@@ -85,11 +73,11 @@ export default {
   }),
 
   methods: {
-    submitForm() {
-      if (this.$refs.form_data.validate()) {
+    logIn() {
+      if (this.$refs.password_form.validate()) {
         this.loading = true;
 
-        Axios.post(`${URL_API}/auth/login`, this.data, headers(null)).then(
+        Axios.post(URL_API + "/auth/login", this.password, headers(null)).then(
           (resp) => {
             if (resp.data.auth) {
               this.$store.dispatch("logInAction", resp.data);

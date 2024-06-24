@@ -6,7 +6,7 @@
           <v-img
             contain
             height="40"
-            alt="Sinergia Médica Logo"
+            alt="logo"
             class="shrink mr-2"
             transition="scale-transition"
             :src="require('@/assets/logo.png')"
@@ -62,9 +62,15 @@ export default {
   mounted() {
     this.items = [
       {
-        title: "Inicio",
+        title: "INICIO",
         icon: "mdi-home",
         link: "home",
+        visible: true,
+      },
+      {
+        title: "USUARIOS",
+        icon: "mdi-account-multiple",
+        link: "users",
         visible: true,
       },
     ];
