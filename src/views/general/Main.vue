@@ -4,7 +4,7 @@
 export default {
   mounted() {
     this.$router.push({
-      name: "login",
+      name: "log_in",
     });
   },
 };

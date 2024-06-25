@@ -2,7 +2,8 @@
   <v-card flat :disabled="ldg">
     <v-card-title class="p-0">
       <v-row dense>
-        <v-col cols="8">
+        <v-col cols="8" class="subtitle-1">
+          <v-icon small> mdi-account-multiple </v-icon>
           {{ $route.meta.title }}
         </v-col>
         <v-col cols="4" class="text-right">
@@ -28,7 +29,7 @@
       <v-row dense justify="end">
         <v-col cols="12" md="2">
           <v-text-field
-            v-model="tbl_search"
+            v-model="tbl_srch"
             label="Buscar..."
             dense
             type="text"
@@ -45,8 +46,8 @@
         <v-col cols="12">
           <v-data-table
             :items="tbl"
-            :search="tbl_search"
-            :headers="tbl_headers"
+            :search="tbl_srch"
+            :headers="tbl_hdrs"
             :loading="ldg"
             :items-per-page="15"
             dense
@@ -65,7 +66,7 @@
                       color="primary"
                       @click.prevent="dataDlg(item)"
                     >
-                      <v-icon x-small> mdi-eye </v-icon>
+                      <v-icon small> mdi-eye </v-icon>
                     </v-btn>
                   </template>
                   Detalle
@@ -87,7 +88,10 @@
         <v-card-title class="p-0">
           <v-row dense>
             <v-col cols="6" class="subtitle-1">
-              {{ store ? "AGREGAR" : show ? "DETALLE" : "EDITAR" }}
+              <v-icon small>
+                mdi-{{ store ? "plus" : update ? "pencil" : "eye" }}
+              </v-icon>
+              {{ store ? "AGREGAR" : update ? "EDITAR" : "DETALLE" }}
             </v-col>
             <v-col cols="6">
               <div class="text-right">
@@ -113,7 +117,7 @@
                         icon
                         small
                         color="pink"
-                        @click.prevent="passwordDlg"
+                        @click.prevent="pwdDlg"
                       >
                         <v-icon small> mdi-lock </v-icon>
                       </v-btn>
@@ -133,6 +137,20 @@
                       </v-btn>
                     </template>
                     Editar
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        icon
+                        small
+                        color="blue"
+                        @click.prevent="reg_dlg = true"
+                      >
+                        <v-icon small> mdi-more </v-icon>
+                      </v-btn>
+                    </template>
+                    Registro
                   </v-tooltip>
                 </span>
                 <v-tooltip bottom>
@@ -259,62 +277,160 @@
     </v-dialog>
 
     <v-dialog
-      v-model="password_dlg"
-      overlay-color="black"
+      v-model="reg_dlg"
       persistent
-      max-width="400"
+      overlay-color="black"
+      max-width="350"
     >
-      <v-card :disabled="password_dlg_ldg" :loading="password_dlg_ldg">
-        <v-toolbar dark>
-          <v-toolbar-title> CONTRASEÑA </v-toolbar-title>
-          <v-spacer />
-          <v-toolbar-items>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-on="on"
-                  x-small
-                  text
-                  class="ml-1"
-                  color=""
-                  @click.prevent="passwordDlgClose"
-                >
-                  <v-icon small> mdi-close </v-icon>
-                </v-btn>
-              </template>
-              <span v-text="'Cerrar'" />
-            </v-tooltip>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card-text v-if="password">
-          <v-form v-on:submit.prevent ref="password_form" lazy-validation>
-            <v-row dense>
-              <v-col cols="12" class="mt-4" />
+      <v-card flat>
+        <v-card-title class="p-0">
+          <v-row dense>
+            <v-col cols="6" class="subtitle-1">
+              <v-icon small> mdi-more </v-icon>
+              REGISTRO
+            </v-col>
+            <v-col cols="6">
+              <div class="text-right">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      icon
+                      small
+                      color="primary"
+                      @click.prevent="reg_dlg = false"
+                    >
+                      <v-icon small> mdi-close </v-icon>
+                    </v-btn>
+                  </template>
+                  <span v-text="'Cerrar'" />
+                </v-tooltip>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text v-if="reg_dlg && data">
+          <v-form readonly>
+            <v-row dense class="mt-1">
               <v-col cols="12">
+                <v-text-field v-model="data.id" label="ID" dense type="text" />
+              </v-col>
+              <v-col cols="6">
                 <v-text-field
-                  label="Contraseña"
-                  v-model="password.password"
+                  v-model="data.created_by.name"
+                  label="Agregado por"
                   dense
-                  :type="pwd_show ? 'text' : 'password'"
-                  :rules="rules.password"
-                  maxlength="15"
-                  counter
-                  :append-icon="pwd_show ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="pwd_show = !pwd_show"
-                  autocomplete="new-password"
+                  type="text"
                 />
               </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="data.created_at"
+                  label="Fecha"
+                  dense
+                  type="text"
+                />
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="data.updated_by.name"
+                  label="Editado por"
+                  dense
+                  type="text"
+                />
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="data.updated_at"
+                  label="Últ. edición"
+                  dense
+                  type="text"
+                />
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="pwd_dlg"
+      persistent
+      overlay-color="black"
+      max-width="350"
+    >
+      <v-card flat :disabled="pwd_dlg_ldg" :loading="pwd_dlg_ldg">
+        <v-card-title class="p-0">
+          <v-row dense>
+            <v-col cols="6" class="subtitle-1">
+              <v-icon small> mdi-lock </v-icon>
+              EDITAR
+            </v-col>
+            <v-col cols="6">
+              <div class="text-right">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      icon
+                      small
+                      color="primary"
+                      @click.prevent="pwdDlgClose"
+                    >
+                      <v-icon small> mdi-close </v-icon>
+                    </v-btn>
+                  </template>
+                  <span v-text="'Cerrar'" />
+                </v-tooltip>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text v-if="pwd">
+          <v-form v-on:submit.prevent ref="pwd_form" lazy-validation>
+            <v-row dense class="mt-1">
               <v-col cols="12">
-                <v-btn
-                  small
-                  block
-                  dark
-                  color="pink"
-                  @click.prevent="passwordUpdate"
+                <v-text-field
+                  v-model="pwd.password"
+                  label="Contraseña"
+                  dense
+                  :type="pwd_show ? 'text' : 'password'"
+                  :rules="rules.pwd"
+                  maxlength="15"
+                  counter
+                  autocomplete="new-password"
                 >
-                  ACTUALIZAR
-                  <v-icon small right> mdi-update </v-icon>
-                </v-btn>
+                  <template v-slot:append>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          v-on="on"
+                          text
+                          x-small
+                          @click.prevent="pwd_show = !pwd_show"
+                        >
+                          <v-icon small>
+                            mdi-eye{{ pwd_show ? "" : "-off" }}
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span> {{ pwd_show ? "Ocultar" : "Mostrar" }} </span>
+                    </v-tooltip>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <div class="text-right">
+                  <v-btn
+                    icon
+                    small
+                    outlined
+                    color="pink"
+                    @click.prevent="pwdHandle"
+                  >
+                    <v-icon small> mdi-check</v-icon>
+                  </v-btn>
+                </div>
               </v-col>
             </v-row>
           </v-form>
@@ -332,45 +448,11 @@ export default {
   components: {},
   data() {
     return {
-      log: this.$store.getters.getLogin,
+      log: this.$store.getters.getLog,
       ldg: false,
       tbl: [],
-      tbl_search: "",
-      tbl_headers: [
-        {
-          value: "key",
-          text: "#",
-          filterable: false,
-          width: "60",
-        },
-        {
-          value: "name",
-          text: "Nombre",
-          filterable: true,
-        },
-        {
-          value: "username",
-          text: "Usuario",
-          filterable: true,
-        },
-        {
-          value: "email",
-          text: "E-mail",
-          filterable: true,
-        },
-        {
-          value: "role_name",
-          text: "Rol",
-          filterable: true,
-        },
-        {
-          value: "action",
-          text: "",
-          filterable: false,
-          sortable: false,
-          width: "60",
-        },
-      ],
+      tbl_srch: "",
+      tbl_hdrs: [],
       tbl_item: null,
       store: false,
       show: false,
@@ -380,12 +462,10 @@ export default {
       data: null,
       data_dlg: false,
       data_dlg_ldg: false,
-      password: {
-        password: null,
-        user_id: null,
-      },
-      password_dlg: false,
-      password_dlg_ldg: false,
+      reg_dlg: false,
+      pwd: null,
+      pwd_dlg: false,
+      pwd_dlg_ldg: false,
       //CATALOGS
       roles: [],
       roles_ldg: true,
@@ -502,6 +582,7 @@ export default {
         this.$swal.fire(msgAlert("error", "Revisa los detalles señalados"));
       }
     },
+
     dataDelete() {
       this.$swal
         .fire(msgConfirm("¿Confirma eliminar registro?"))
@@ -539,27 +620,33 @@ export default {
           }
         });
     },
-    passwordDlg() {
-      this.password.user_id = this.show.id;
+
+    pwdDlg() {
       this.pwd_show = false;
-      this.password_dlg_ldg = false;
-      this.password_dlg = true;
+      this.pwd = {
+        id: this.data.id,
+        password: null,
+      };
+      this.pwd_dlg_ldg = false;
+      this.pwd_dlg = true;
     },
-    passwordDlgClose() {
-      this.$refs.password_form.reset();
-      this.password_dlg = false;
+
+    pwdDlgClose() {
+      this.pwd_dlg = false;
+      this.$refs.pwd_form.reset();
     },
-    passwordUpdate() {
-      if (this.$refs.password_form.validate()) {
+
+    pwdHandle() {
+      if (this.$refs.pwd_form.validate()) {
         this.$swal
           .fire(msgConfirm("¿Confirma actualizar contraseña?"))
           .then((res) => {
             if (res.isConfirmed) {
-              this.password_dlg_ldg = true;
+              this.pwd_dlg_ldg = true;
 
               Axios.post(
-                URL_API + "/users/password_update",
-                this.password,
+                URL_API + "/users/pwd_update",
+                this.pwd,
                 headers(this.log.token)
               ).then((res) => {
                 this.$swal.fire(
@@ -570,12 +657,12 @@ export default {
                 );
 
                 if (res.data.success) {
-                  this.passwordDlgClose();
+                  this.pwdDlgClose();
                 } else {
                   console.log(res.data.message);
                 }
 
-                this.password_dlg_ldg = false;
+                this.pwd_dlg_ldg = false;
               });
             }
           });
@@ -585,6 +672,42 @@ export default {
     },
   },
   mounted() {
+    this.tbl_hdrs = [
+      {
+        value: "key",
+        text: "#",
+        filterable: false,
+        width: "60",
+      },
+      {
+        value: "name",
+        text: "Nombre",
+        filterable: true,
+      },
+      {
+        value: "username",
+        text: "Usuario",
+        filterable: true,
+      },
+      {
+        value: "email",
+        text: "E-mail",
+        filterable: true,
+      },
+      {
+        value: "role_name",
+        text: "Rol",
+        filterable: true,
+      },
+      {
+        value: "action",
+        text: "",
+        filterable: false,
+        sortable: false,
+        width: "60",
+      },
+    ];
+
     Axios.get(URL_API + "/roles", headers(this.log.token)).then((res) => {
       this.roles = res.data.data;
       this.roles_ldg = false;

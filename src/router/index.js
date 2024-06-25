@@ -12,7 +12,7 @@ const routes = [
     component: () => import('../views/users/Index.vue'),
     meta: {
       title: 'USUARIOS',
-      requiresAuth: true,
+      req_auth: true,
       permission: true
     }
   },
@@ -25,8 +25,8 @@ const routes = [
   },
   {
     path: '/inicio_sesion',
-    name: 'login',
-    component: () => import('../views/general/Login.vue'),
+    name: 'log_in',
+    component: () => import('../views/general/LogIn.vue'),
     meta: { title: 'INICIAR SESIÓN' }
   },
   {
@@ -35,7 +35,7 @@ const routes = [
     component: () => import('../views/general/Home.vue'),
     meta: {
       title: 'INICIO',
-      requiresAuth: true,
+      req_auth: true,
       permission: true
     }
   },
@@ -45,7 +45,7 @@ const routes = [
     component: () => import('../views/general/Unauthorized.vue'),
     meta: {
       title: 'ACCESO DENEGADO',
-      requiresAuth: true,
+      req_auth: true,
       permission: true
     },
   },
@@ -63,9 +63,9 @@ const router = new VueRouter({
 })
 
 // function setPermission(interface_atr, permission) {
-//   if (store.getters.getLogin.permissions) {
-//     if (store.getters.getLogin.permissions[interface_atr]) {
-//       return store.getters.getLogin.permissions[interface_atr][permission]
+//   if (store.getters.getLog.permissions) {
+//     if (store.getters.getLog.permissions[interface_atr]) {
+//       return store.getters.getLog.permissions[interface_atr][permission]
 //     }
 //     return false
 //   }
@@ -73,14 +73,14 @@ const router = new VueRouter({
 // }
 
 router.beforeEach((to, from, next) => {
-  let auth = store.getters.getLogin.auth
+  let auth = store.getters.getLog.auth
 
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.req_auth)) {
     if (to.matched.some((record) => record.meta.permission)) {
       if (auth) {
         next()
       } else {
-        next({ name: 'login' })
+        next({ name: 'log_in' })
       }
     } else {
       next({ name: 'unauthorized' })

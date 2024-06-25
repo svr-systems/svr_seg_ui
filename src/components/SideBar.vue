@@ -22,11 +22,11 @@
         v-for="(item, i) in items"
         :key="i"
         :to="{ name: item.link }"
-        v-if="item.visible"
+        v-if="item.show"
         link
       >
-        <v-list-item-icon class="mr-3">
-          <v-icon>
+        <v-list-item-icon class="mr-0">
+          <v-icon small>
             {{ item.icon }}
           </v-icon>
         </v-list-item-icon>
@@ -45,7 +45,7 @@ export default {
   props: ["drawer"],
   data() {
     return {
-      login: this.$store.getters.getLogin,
+      log: this.$store.getters.getLog,
       items: [],
     };
   },
@@ -62,16 +62,16 @@ export default {
   mounted() {
     this.items = [
       {
+        link: "home",
         title: "INICIO",
         icon: "mdi-home",
-        link: "home",
-        visible: true,
+        show: true,
       },
       {
+        link: "users",
         title: "USUARIOS",
         icon: "mdi-account-multiple",
-        link: "users",
-        visible: true,
+        show: true,
       },
     ];
   },

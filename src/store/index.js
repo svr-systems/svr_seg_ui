@@ -6,18 +6,24 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    login: {
+    log: {
       auth: false
+    },
+    conf: {
+      dark_mode: true
     }
   },
   mutations: {
     LOGIN: (state, data) => {
-      state.login = data;
+      state.log = data;
     },
     LOGOUT: state => {
-      state.login = {
+      state.log = {
         auth: false
       };
+    },
+    DARKMODE: state => {
+      state.conf.dark_mode = !state.conf.dark_mode;
     },
   },
   actions: {
@@ -27,10 +33,16 @@ export default new Vuex.Store({
     logOutAction: context => {
       context.commit('LOGOUT');
     },
+    darkModeAction: context => {
+      context.commit('DARKMODE');
+    },
   },
   getters: {
-    getLogin: state => {
-      return state.login;
+    getLog: state => {
+      return state.log;
+    },
+    getDarkMode: state => {
+      return state.conf.dark_mode;
     }
   },
   plugins: [createPersistedState()],

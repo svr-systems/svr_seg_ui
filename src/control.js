@@ -82,7 +82,7 @@ export const toFormData = data => {
 
 export const rules = () => {
   return {
-    password: [
+    pwd: [
       (v) => !!v || 'Campo requerido.',
       (v) => (v && v.length >= 8) || 'Mínimo 8 caracteres.',
       (v) => (v && v.length <= 15) || 'Máximo 15 caracteres.',
@@ -96,7 +96,7 @@ export const rules = () => {
       (v) => (v && v.length <= 50) || "Máximo 50 caracteres.",
       (v) => /.+@.+\..+/.test(v) || "Formato invalido.",
     ],
-    emailNoRequired: [
+    emailNR: [
       v => {
         if (v) return (v && v.length <= 50) || "Máximo 50 caracteres."
         else return true
