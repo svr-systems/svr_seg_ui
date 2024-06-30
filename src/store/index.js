@@ -24,7 +24,7 @@ export default new Vuex.Store({
     },
     DARKMODE: state => {
       state.conf.dark_mode = !state.conf.dark_mode;
-    },
+    }
   },
   actions: {
     logInAction: (context, data) => {
@@ -35,15 +35,15 @@ export default new Vuex.Store({
     },
     darkModeAction: context => {
       context.commit('DARKMODE');
-    },
+    }
   },
   getters: {
     getLog: state => {
       return state.log;
     },
-    getDarkMode: state => {
-      return state.conf.dark_mode;
+    getConf: state => {
+      return state.conf;
     }
   },
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState()]
 })

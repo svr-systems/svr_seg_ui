@@ -442,7 +442,7 @@
 
 <script>
 import Axios from "axios";
-import { URL_API, headers, rules, msgAlert, msgConfirm } from "../../control";
+import { URL_API, headers, rules, msgAlert, msgConfirm } from "@/control";
 
 export default {
   components: {},

@@ -63,9 +63,8 @@
                         <template v-slot:activator="{ on }">
                           <v-btn
                             v-on="on"
-                            icon
                             small
-                            outlined
+                            fab
                             color="warning"
                             @click.prevent="logIn"
                           >
@@ -87,8 +86,8 @@
 </template>
 
 <script>
+import { URL_API, headers, rules } from "@/control";
 import Axios from "axios";
-import { URL_API, headers, rules, msgAlert } from "../../control";
 
 export default {
   data() {
@@ -107,18 +106,22 @@ export default {
       if (this.$refs.data_form.validate()) {
         this.ldg = true;
 
-        Axios.post(URL_API + "/auth/log_in", this.data, headers(null)).then(
-          (res) => {
-            if (res.data.auth) {
-              this.$store.dispatch("logInAction", res.data);
+        Axios.post(URL_API + "/auth/log_in", this.data, headers(null))
+          .then((res) => {
+            if (res.data.ok) {
+              this.$store.dispatch("logInAction", res.data.data);
               this.$router.push({ name: "home" });
             } else {
-              this.$swal.fire(msgAlert("error", res.data.message));
+              this.$root.$alert("error", res.data.msg);
+              console.log(res.data.err);
             }
 
             this.ldg = false;
-          }
-        );
+          })
+          .catch((e) => {
+            this.$root.$alert("error", res);
+            console.log(res.data.err);
+          });
       }
     },
   },

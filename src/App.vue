@@ -20,7 +20,7 @@
               <v-icon> mdi-brightness-6 </v-icon>
             </v-btn>
           </template>
-          Modo {{ $store.getters.getDarkMode ? "Obscuro" : "Claro" }}
+          Modo {{ $store.getters.getConf.dark_mode ? "Obscuro" : "Claro" }}
         </v-tooltip>
 
         <v-tooltip v-if="$store.getters.getLog.auth" bottom>
@@ -60,13 +60,16 @@
         </v-col>
       </v-row>
     </v-footer>
+
+    <Alert ref="alert" />
+    <Confirm ref="confirm" />
   </v-app>
 </template>
 
 <script>
+import { URL_API, headers } from "@/control";
 import Axios from "axios";
-import { URL_API, headers, msgConfirm, msgAlert } from "./control";
-import SideBar from "./components/SideBar.vue";
+import SideBar from "@/components/SideBar.vue";
 
 export default {
   components: {
@@ -75,7 +78,7 @@ export default {
 
   data() {
     return {
-      version: "v1.24.06.24",
+      version: "v1.24.06.30",
       title: "SVR-SEG",
       drawer: false,
       log_ldg: false,
@@ -86,11 +89,11 @@ export default {
     logOut() {
       this.$store.dispatch("logOutAction");
       this.$router.push({ name: "log_in" });
-      this.log_ldg = false;
     },
+
     logOutHandle() {
-      this.$swal.fire(msgConfirm("¿Confirma cerrar la sesión?")).then((res) => {
-        if (res.isConfirmed) {
+      this.$root.$confirm("¿Cerrar sesión?").then((confirmed) => {
+        if (confirmed) {
           this.log_ldg = true;
 
           Axios.get(
@@ -98,11 +101,14 @@ export default {
             headers(this.$store.getters.getLog.token)
           )
             .then((res) => {
-              if (res.data.success) {
+              if (res.data.ok) {
                 this.logOut();
               } else {
-                this.$swal.fire(msgAlert("error", res.data.message));
+                this.$root.$alert("error", res.data.msg);
+                console.log(res.data.err);
               }
+
+              this.log_ldg = false;
             })
             .catch((e) => {
               this.logOut();
@@ -110,9 +116,11 @@ export default {
         }
       });
     },
+
     darkModeHandle() {
-      this.$vuetify.theme.dark = !this.$store.getters.getDarkMode;
+      this.$vuetify.theme.dark = !this.$store.getters.getConf.dark_mode;
     },
+
     darkModeAction() {
       this.$store.dispatch("darkModeAction");
       this.darkModeHandle();
@@ -120,6 +128,8 @@ export default {
   },
   mounted() {
     this.darkModeHandle();
+    this.$root.$alert = this.$refs.alert.show;
+    this.$root.$confirm = this.$refs.confirm.show;
   },
 };
 </script>
@@ -137,5 +147,9 @@ export default {
 .swal2-html-container,
 .swal2-styled {
   font-family: "Roboto" !important;
+}
+.v-alert__icon {
+  font-size: 16px !important;
+  margin-right: 2px !important;
 }
 </style>
