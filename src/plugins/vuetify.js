@@ -19,7 +19,7 @@ export default new Vuetify({
             },
             light: {
                 primary: '#222',
-              },
+            },
         }
-    },
+    }
 });

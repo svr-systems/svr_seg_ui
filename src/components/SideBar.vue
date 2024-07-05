@@ -54,8 +54,8 @@ export default {
       get: function () {
         return this.drawer;
       },
-      set: function (v) {
-        this.$emit("update:drawer", v);
+      set: function (val) {
+        this.$emit("update:drawer", val);
       },
     },
   },

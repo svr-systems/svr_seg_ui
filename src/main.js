@@ -1,13 +1,13 @@
 import Vue from 'vue'
-import App from '@/App.vue'
-import router from '@/router'
-import store from '@/store'
 import vuetify from '@/plugins/vuetify'
-import Confirm from "@/components/Confirm"
+import store from '@/store'
+import router from '@/router'
+import App from '@/App.vue'
 import Alert from "@/components/Alert"
+import Confirm from "@/components/Confirm"
 
-Vue.component('Confirm', Confirm)
 Vue.component('Alert', Alert)
+Vue.component('Confirm', Confirm)
 
 Vue.config.productionTip = false
 

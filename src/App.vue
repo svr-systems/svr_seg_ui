@@ -5,7 +5,7 @@
     <v-app-bar app dense dark>
       <v-app-bar-nav-icon
         v-if="$store.getters.getLog.auth"
-        @click="drawer = true"
+        @click.prevent="drawer = true"
       />
 
       <v-toolbar-title>
@@ -13,6 +13,7 @@
       </v-toolbar-title>
 
       <v-spacer />
+
       <div>
         <v-tooltip left>
           <template v-slot:activator="{ on }">
@@ -143,10 +144,6 @@ export default {
 }
 .v-icon.v-icon {
   vertical-align: baseline !important;
-}
-.swal2-html-container,
-.swal2-styled {
-  font-family: "Roboto" !important;
 }
 .v-alert__icon {
   font-size: 16px !important;

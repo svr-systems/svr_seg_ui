@@ -1,11 +1,5 @@
 <template>
-  <div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <h1 v-text="'NO AUTORIZADO'" />
-  </div>
+  <div class="display-3 text-center">NO AUTORIZADO</div>
 </template>
 
 <script>

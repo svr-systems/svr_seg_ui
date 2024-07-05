@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/usuarios',
     name: 'users',
-    component: () => import('../views/users/Index.vue'),
+    component: () => import('@/views/users/Index.vue'),
     meta: {
       title: 'USUARIOS',
       req_auth: true,
@@ -20,19 +20,23 @@ const routes = [
   {
     path: '/',
     name: 'main',
-    component: () => import('../views/general/Main.vue'),
-    meta: { title: 'SVR' }
+    component: () => import('@/views/general/Main.vue'),
+    meta: {
+      title: 'SVR'
+    }
   },
   {
     path: '/inicio_sesion',
     name: 'log_in',
-    component: () => import('../views/general/LogIn.vue'),
-    meta: { title: 'INICIAR SESIÓN' }
+    component: () => import('@/views/general/LogIn.vue'),
+    meta: {
+      title: 'INICIAR SESIÓN'
+    }
   },
   {
     path: '/inicio',
     name: 'home',
-    component: () => import('../views/general/Home.vue'),
+    component: () => import('@/views/general/Home.vue'),
     meta: {
       title: 'INICIO',
       req_auth: true,
@@ -42,7 +46,7 @@ const routes = [
   {
     path: '/acceso_denegado',
     name: 'unauthorized',
-    component: () => import('../views/general/Unauthorized.vue'),
+    component: () => import('@/views/general/Unauthorized.vue'),
     meta: {
       title: 'ACCESO DENEGADO',
       req_auth: true,
@@ -52,7 +56,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not_found',
-    component: () => import('../views/general/NotFound.vue'),
+    component: () => import('@/views/general/NotFound.vue'),
   }
 ]
 

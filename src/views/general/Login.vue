@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-card-title class="p-0"> </v-card-title>
+    <v-card-title /> 
     <v-card-text>
       <v-row dense justify="center">
         <v-col cols="12" xs="10" md="3">
