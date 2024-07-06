@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-card-title /> 
+    <v-card-title />
     <v-card-text>
       <v-row dense justify="center">
         <v-col cols="12" xs="10" md="3">
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { URL_API, headers, rules } from "@/control";
+import { API, hdrs, val, err, rules } from "@/control";
 import Axios from "axios";
 
 export default {
@@ -106,21 +106,22 @@ export default {
       if (this.$refs.data_form.validate()) {
         this.ldg = true;
 
-        Axios.post(URL_API + "/auth/log_in", this.data, headers(null))
-          .then((res) => {
-            if (res.data.ok) {
-              this.$store.dispatch("logInAction", res.data.data);
+        Axios.post(API + "/auth/log_in", this.data, hdrs())
+          .then((rsp) => {
+            rsp = val(rsp);
+
+            if (rsp.ok) {
+              this.$store.dispatch("logInAction", rsp.data);
               this.$router.push({ name: "home" });
             } else {
-              this.$root.$alert("error", res.data.msg);
-              console.log(res.data.err);
+              this.$root.$alert("error", err(rsp));
             }
 
             this.ldg = false;
           })
           .catch((e) => {
-            this.$root.$alert("error", res);
-            console.log(res.data.err);
+            this.$root.$alert("error", err(e));
+            this.ldg = false;
           });
       }
     },

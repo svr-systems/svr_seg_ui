@@ -51,7 +51,7 @@
       <v-row>
         <v-col cols="6">
           <small v-if="$store.getters.getLog.auth" class="pl-1">
-            {{ $store.getters.getLog.user.username }}
+            {{ $store.getters.getLog.user.nickname }}
           </small>
         </v-col>
         <v-col cols="6" class="text-right">
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { URL_API, headers } from "@/control";
+import { API, hdrs, val, err } from "@/control";
 import Axios from "axios";
 import SideBar from "@/components/SideBar.vue";
 
@@ -98,20 +98,23 @@ export default {
           this.log_ldg = true;
 
           Axios.get(
-            URL_API + "/auth/log_out",
-            headers(this.$store.getters.getLog.token)
+            API + "/auth/log_out",
+            hdrs(this.$store.getters.getLog.token)
           )
-            .then((res) => {
-              if (res.data.ok) {
+            .then((rsp) => {
+              rsp = val(rsp);
+
+              if (rsp.ok) {
                 this.logOut();
               } else {
-                this.$root.$alert("error", res.data.msg);
-                console.log(res.data.err);
+                this.$root.$alert("error", err(rsp));
+                this.logOut();
               }
 
               this.log_ldg = false;
             })
             .catch((e) => {
+              this.$root.$alert("error", err(e));
               this.logOut();
             });
         }
@@ -139,12 +142,15 @@ export default {
 .theme--dark.v-application {
   background: #1e1e1e !important;
 }
+
 .v-tooltip__content {
   font-size: 12px !important;
 }
+
 .v-icon.v-icon {
   vertical-align: baseline !important;
 }
+
 .v-alert__icon {
   font-size: 16px !important;
   margin-right: 2px !important;

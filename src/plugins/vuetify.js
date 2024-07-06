@@ -1,25 +1,25 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import es from 'vuetify/lib/locale/es'
+import Vue from "vue";
+import Vuetify from "vuetify/lib/framework";
+import es from "vuetify/lib/locale/es";
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
-    lang: {
-        locales: {
-            es
-        },
-        current: 'es'
+  lang: {
+    locales: {
+      es,
     },
-    theme: {
-        dark: true,
-        themes: {
-            dark: {
-                primary: '#ddd',
-            },
-            light: {
-                primary: '#222',
-            },
-        }
-    }
+    current: "es",
+  },
+  theme: {
+    dark: true,
+    themes: {
+      dark: {
+        primary: "#ddd",
+      },
+      light: {
+        primary: "#222",
+      },
+    },
+  },
 });

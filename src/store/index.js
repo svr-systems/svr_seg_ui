@@ -1,49 +1,49 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate';
+import Vue from "vue";
+import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     log: {
-      auth: false
+      auth: false,
     },
     conf: {
-      dark_mode: true
-    }
+      dark_mode: true,
+    },
   },
   mutations: {
     LOGIN: (state, data) => {
       state.log = data;
     },
-    LOGOUT: state => {
+    LOGOUT: (state) => {
       state.log = {
-        auth: false
+        auth: false,
       };
     },
-    DARKMODE: state => {
+    DARKMODE: (state) => {
       state.conf.dark_mode = !state.conf.dark_mode;
-    }
+    },
   },
   actions: {
     logInAction: (context, data) => {
-      context.commit('LOGIN', data);
+      context.commit("LOGIN", data);
     },
-    logOutAction: context => {
-      context.commit('LOGOUT');
+    logOutAction: (context) => {
+      context.commit("LOGOUT");
     },
-    darkModeAction: context => {
-      context.commit('DARKMODE');
-    }
+    darkModeAction: (context) => {
+      context.commit("DARKMODE");
+    },
   },
   getters: {
-    getLog: state => {
+    getLog: (state) => {
       return state.log;
     },
-    getConf: state => {
+    getConf: (state) => {
       return state.conf;
-    }
+    },
   },
-  plugins: [createPersistedState()]
-})
+  plugins: [createPersistedState()],
+});
