@@ -15,7 +15,7 @@
             </div>
           </v-col>
           <v-col cols="12">
-            <v-btn fab small color="warning" @click.prevent="cancel">
+            <v-btn fab small color="secondary" @click.prevent="cancel">
               <v-icon small> mdi-close </v-icon>
             </v-btn>
             <span class="mx-2" />

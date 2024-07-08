@@ -1,10 +1,9 @@
 <template>
   <v-card flat :disabled="ldg">
-    <v-card-title class="p-0">
+    <v-card-title>
       <v-row dense>
-        <v-col cols="8" class="subtitle-1">
-          <v-icon small> mdi-account-multiple </v-icon>
-          {{ $route.meta.title }}
+        <v-col cols="8">
+          <CardTitle :text="$route.meta.title" :icon="$route.meta.icon" />
         </v-col>
         <v-col cols="4" class="text-right">
           <v-tooltip bottom>
@@ -42,6 +41,7 @@
           </v-text-field>
         </v-col>
       </v-row>
+
       <v-row dense>
         <v-col cols="12">
           <v-data-table
@@ -85,13 +85,14 @@
       max-width="400"
     >
       <v-card flat :disabled="data_dlg_ldg" :loading="data_dlg_ldg">
-        <v-card-title class="p-0">
+        <v-card-title class="card_title_border">
           <v-row dense>
-            <v-col cols="6" class="subtitle-1">
-              <v-icon small>
-                mdi-{{ store ? "plus" : update ? "pencil" : "eye" }}
-              </v-icon>
-              {{ store ? "AGREGAR" : update ? "EDITAR" : "DETALLE" }}
+            <v-col cols="6">
+              <CardTitle
+                :text="store ? 'AGREGAR' : update ? 'EDITAR' : 'DETALLE'"
+                :icon="'mdi-' + (store ? 'plus' : update ? 'pencil' : 'eye')"
+                sub
+              />
             </v-col>
             <v-col cols="6">
               <div class="text-right">
@@ -180,7 +181,7 @@
             lazy-validation
             :readonly="show && !update"
           >
-            <v-row dense class="mt-1">
+            <v-row dense>
               <v-col cols="12">
                 <v-text-field
                   v-model="data.name"
@@ -280,15 +281,20 @@
               </v-col>
               <v-col v-if="store || update" cols="12">
                 <div class="text-right">
-                  <v-btn
-                    icon
-                    small
-                    outlined
-                    :color="store ? 'success' : 'warning'"
-                    @click.prevent="dataHandle"
-                  >
-                    <v-icon small> mdi-check</v-icon>
-                  </v-btn>
+                  <v-tooltip left>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        fab
+                        x-small
+                        :color="store ? 'success' : 'warning'"
+                        @click.prevent="dataHandle"
+                      >
+                        <v-icon small> mdi-check</v-icon>
+                      </v-btn>
+                    </template>
+                    <span> Confirmar </span>
+                  </v-tooltip>
                 </div>
               </v-col>
             </v-row>
@@ -304,11 +310,10 @@
       max-width="350"
     >
       <v-card flat>
-        <v-card-title class="p-0">
+        <v-card-title class="card_title_border">
           <v-row dense>
-            <v-col cols="6" class="subtitle-1">
-              <v-icon small> mdi-more </v-icon>
-              REGISTRO
+            <v-col cols="6">
+              <CardTitle text="REGISTRO" icon="mdi-more" sub />
             </v-col>
             <v-col cols="6">
               <div class="text-right">
@@ -332,7 +337,7 @@
         </v-card-title>
         <v-card-text v-if="reg_dlg && data">
           <v-form readonly>
-            <v-row dense class="mt-1">
+            <v-row dense>
               <v-col cols="12">
                 <v-text-field v-model="data.id" label="ID" dense type="text" />
               </v-col>
@@ -381,11 +386,10 @@
       max-width="350"
     >
       <v-card flat :disabled="pwd_dlg_ldg" :loading="pwd_dlg_ldg">
-        <v-card-title class="p-0">
+        <v-card-title class="card_title_border">
           <v-row dense>
-            <v-col cols="6" class="subtitle-1">
-              <v-icon small> mdi-lock </v-icon>
-              EDITAR
+            <v-col cols="6">
+              <CardTitle text="EDITAR" icon="mdi-lock" sub />
             </v-col>
             <v-col cols="6">
               <div class="text-right">
@@ -409,7 +413,7 @@
         </v-card-title>
         <v-card-text v-if="pwd">
           <v-form v-on:submit.prevent ref="pwd_form" lazy-validation>
-            <v-row dense class="mt-1">
+            <v-row dense>
               <v-col cols="12">
                 <v-text-field
                   v-model="pwd.password"
@@ -442,15 +446,20 @@
               </v-col>
               <v-col cols="12">
                 <div class="text-right">
-                  <v-btn
-                    icon
-                    small
-                    outlined
-                    color="pink"
-                    @click.prevent="pwdHandle"
-                  >
-                    <v-icon small> mdi-check</v-icon>
-                  </v-btn>
+                  <v-tooltip left>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        fab
+                        x-small
+                        color="pink"
+                        @click.prevent="pwdHandle"
+                      >
+                        <v-icon small> mdi-check</v-icon>
+                      </v-btn>
+                    </template>
+                    <span> Confirmar </span>
+                  </v-tooltip>
                 </div>
               </v-col>
             </v-row>
@@ -464,9 +473,12 @@
 <script>
 import { API, hdrs, val, err, rules } from "@/control";
 import Axios from "axios";
+import CardTitle from "@/components/CardTitle.vue";
 
 export default {
-  components: {},
+  components: {
+    CardTitle,
+  },
   data() {
     return {
       log: this.$store.getters.getLog,
@@ -619,7 +631,7 @@ export default {
               rsp = val(rsp);
 
               this.$root.$alert(
-                rsp.ok ? "success" : "error",
+                rsp.ok ? "warning" : "error",
                 rsp.ok ? rsp.msg : err(rsp)
               );
 

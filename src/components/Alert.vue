@@ -29,7 +29,7 @@ export default {
         this.visible = false;
         this.type = null;
         this.msg = null;
-      }, 5000);
+      }, 6000);
     },
   },
 };

@@ -79,7 +79,7 @@ export default {
 
   data() {
     return {
-      version: "v1.24.06.30",
+      version: "v1.24.07.08",
       title: "SVR-SEG",
       drawer: false,
       log_ldg: false,
@@ -154,5 +154,18 @@ export default {
 .v-alert__icon {
   font-size: 16px !important;
   margin-right: 2px !important;
+}
+
+.v-card__title {
+  padding: 10px !important;
+}
+
+.card_title_margin {
+  margin-bottom: 16px !important;
+}
+
+.card_title_border {
+  margin-bottom: 16px !important;
+  border-bottom: 0.5px solid rgba(126, 126, 126, 0.2);
 }
 </style>

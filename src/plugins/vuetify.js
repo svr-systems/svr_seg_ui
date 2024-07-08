@@ -15,10 +15,12 @@ export default new Vuetify({
     dark: true,
     themes: {
       dark: {
-        primary: "#ddd",
+        primary: "#EEEEEE",
+        secondary: "#BDBDBD",
       },
       light: {
-        primary: "#222",
+        primary: "#212121",
+        secondary: "#BDBDBD",
       },
     },
   },

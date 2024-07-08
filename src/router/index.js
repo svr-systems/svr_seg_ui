@@ -7,15 +7,62 @@ Vue.use(VueRouter);
 const routes = [
   //users
   {
-    path: "/usuarios",
-    name: "users",
-    component: () => import("@/views/users/Resource.vue"),
+    path: "/usuarios/:id/editar",
+    name: "users.update",
+    component: () => import("@/views/users/StoreUpdate.vue"),
     meta: {
-      title: "USUARIOS",
+      title: "USUARIO | EDITAR",
+      icon: "mdi-account-multiple",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/usuarios/:id",
+    name: "users.show",
+    component: () => import("@/views/users/Show.vue"),
+    meta: {
+      title: "USUARIO",
+      icon: "mdi-account-multiple",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/usuarios/agregar",
+    name: "users.store",
+    component: () => import("@/views/users/StoreUpdate.vue"),
+    meta: {
+      title: "USUARIO | AGREGAR",
+      icon: "mdi-account-multiple",
       req_auth: true,
       permission: true,
     },
   },
+  {
+    path: "/usuarios",
+    name: "users",
+    component: () => import("@/views/users/Index.vue"),
+    meta: {
+      title: "USUARIOS",
+      icon: "mdi-account-multiple",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  // {
+  //   path: "/usuarios",
+  //   name: "users",
+  //   component: () => import("@/views/users/Resource.vue"),
+  //   meta: {
+  //     title: "USUARIOS",
+  //     icon: "mdi-account-multiple",
+  //     req_auth: true,
+  //     permission: true,
+  //   },
+  // },
   //general
   {
     path: "/",

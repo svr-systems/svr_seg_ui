@@ -63,8 +63,8 @@
                         <template v-slot:activator="{ on }">
                           <v-btn
                             v-on="on"
-                            small
                             fab
+                            x-small
                             color="warning"
                             @click.prevent="logIn"
                           >
