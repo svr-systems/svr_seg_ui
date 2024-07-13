@@ -7,16 +7,26 @@ Vue.use(VueRouter);
 const routes = [
   //users
   {
-    path: "/usuarios/:id/editar",
-    name: "users.update",
-    component: () => import("@/views/users/StoreUpdate.vue"),
+    path: "/usuarios",
+    name: "users",
+    component: () => import("@/views/users/Index.vue"),
     meta: {
-      title: "USUARIO | EDITAR",
+      title: "USUARIOS",
       icon: "mdi-account-multiple",
       req_auth: true,
       permission: true,
     },
-    props: true,
+  },
+  {
+    path: "/usuarios/agregar",
+    name: "users.store",
+    component: () => import("@/views/users/StoreUpdate.vue"),
+    meta: {
+      title: "USUARIO | AGREGAR",
+      icon: "mdi-account-multiple",
+      req_auth: true,
+      permission: true,
+    },
   },
   {
     path: "/usuarios/:id",
@@ -31,26 +41,16 @@ const routes = [
     props: true,
   },
   {
-    path: "/usuarios/agregar",
-    name: "users.store",
+    path: "/usuarios/:id/editar",
+    name: "users.update",
     component: () => import("@/views/users/StoreUpdate.vue"),
     meta: {
-      title: "USUARIO | AGREGAR",
+      title: "USUARIO | EDITAR",
       icon: "mdi-account-multiple",
       req_auth: true,
       permission: true,
     },
-  },
-  {
-    path: "/usuarios",
-    name: "users",
-    component: () => import("@/views/users/Index.vue"),
-    meta: {
-      title: "USUARIOS",
-      icon: "mdi-account-multiple",
-      req_auth: true,
-      permission: true,
-    },
+    props: true,
   },
   // {
   //   path: "/usuarios",

@@ -61,6 +61,17 @@
                       counter
                     />
                   </v-col>
+                  <v-col cols="12" sm="12" md="3">
+                    <v-file-input
+                      v-model="data.avatar_doc"
+                      label="Fotografía (IMG)*"
+                      dense
+                      :rules="rules.fileLmtNR"
+                      show-size
+                      prepend-icon=""
+                      accept="image/*"
+                    />
+                  </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -170,7 +181,16 @@
 </template>
 
 <script>
-import { API, hdrs, val, err, rules } from "@/control";
+import {
+  API,
+  hdrs,
+  val,
+  err,
+  rules,
+  objAssign,
+  objDocs,
+  toFormData,
+} from "@/control";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
@@ -180,6 +200,7 @@ export default {
     BtnBack,
     CardTitle,
   },
+
   data() {
     return {
       rte: "users",
@@ -196,6 +217,7 @@ export default {
       pwd_show: false,
     };
   },
+
   methods: {
     getCatalogs() {
       Axios.get(API + "/roles", hdrs(this.log.token)).then((rsp) => {
@@ -204,6 +226,7 @@ export default {
         this.roles_ldg = false;
       });
     },
+
     getData() {
       this.store = this.id == null;
 
@@ -213,6 +236,7 @@ export default {
           name: null,
           first_surname: null,
           second_surname: null,
+          avatar_doc: null,
           nickname: null,
           email: null,
           password: null,
@@ -242,16 +266,12 @@ export default {
             if (confirmed) {
               this.ldg = true;
 
-              let obj = Object.assign({}, this.data);
-
-              if (!this.store) {
-                obj._method = "PATCH";
-              }
+              let obj = objAssign(this.data, this.store);
 
               Axios.post(
                 API + "/" + this.rte + (this.store ? "" : "/" + obj.id),
-                obj,
-                hdrs(this.log.token)
+                toFormData(obj),
+                hdrs(this.log.token, true)
               )
                 .then((rsp) => {
                   rsp = val(rsp);
@@ -281,6 +301,7 @@ export default {
       }
     },
   },
+
   mounted() {
     this.getCatalogs();
     this.getData();

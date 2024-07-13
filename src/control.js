@@ -1,11 +1,16 @@
 export const URL = "http://127.0.0.1:8000";
 export const API = URL + "/api";
 
-export const hdrs = (token = null) => {
+export const hdrs = (token = false, form_data = false) => {
   let headers = {
-    "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
   };
+
+  if (form_data) {
+    headers["Content-Type"] = "multipart/form-data";
+  } else {
+    headers["Content-Type"] = "application/json";
+  }
 
   if (token) {
     headers["Authorization"] = "Bearer " + token;
@@ -42,6 +47,12 @@ export const err = (e) => {
 export const rules = () => {
   return {
     required: [(v) => !!v || "Campo requerido."],
+    nickname: [
+      (v) => !!v || "Campo requerido.",
+      (v) =>
+        /^[A-Za-z0-9\-]*$/.test(v) ||
+        "Solo caracteres alfanuméricos y guión medio",
+    ],
     email: [
       (v) => !!v || "Campo requerido.",
       (v) => (v && v.length <= 50) || "Máximo 50 caracteres.",
@@ -67,31 +78,59 @@ export const rules = () => {
       (v) =>
         /([!@$%*])/.test(v) || "Al menos un caractere especial (! @ $ % *).",
     ],
-    nickname: [
+    fileLmt: [
       (v) => !!v || "Campo requerido.",
-      (v) =>
-        /^[A-Za-z0-9\-]*$/.test(v) ||
-        "Solo caracteres alfanuméricos y guión medio",
+      (v) => (v && v.size <= 786432) || "El tamaño máximo de carga es de 768kB",
+    ],
+    fileLmtNR: [
+      (v) => {
+        if (v)
+          return (
+            (v && v.size <= 786432) || "El tamaño máximo de carga es de 768kB"
+          );
+        else return true;
+      },
     ],
   };
 };
 
+export const objAssign = (data, store) => {
+  let obj = Object.assign({}, data);
+
+  if (!store) {
+    obj["_method"] = "PATCH";
+  }
+
+  return obj;
+};
+
+export const objDocs = (obj, prop, subprop) => {
+  //HOW TO USE: obj = objDocs(obj, "items", "doc");
+  let i = 0;
+  for (let val of obj[prop]) {
+    obj[prop.substring(0, prop.length - 1) + "_doc_" + i] = val[subprop];
+    i++;
+  }
+
+  return obj;
+};
+
 export const toFormData = (data) => {
-  const formData = new FormData();
+  let form_data = new FormData();
 
   Object.keys(data).forEach((key) => {
     if (
-      typeof data[key] === "object" &&
-      data[key] !== null &&
-      Array.isArray(data[key])
+      !(data[key] instanceof File) &&
+      typeof data[key] == "object" &&
+      data[key] != null
     ) {
-      formData.append(key, JSON.stringify(data[key]));
+      form_data.append(key, JSON.stringify(data[key]));
     } else {
-      formData.append(key, data[key]);
+      form_data.append(key, data[key]);
     }
   });
 
-  return formData;
+  return form_data;
 };
 
 export const dateTimeNow = () => {
