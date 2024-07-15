@@ -87,6 +87,9 @@
                 <v-col cols="12" sm="12" md="3">
                   <DataVal :val="data.second_surname" lab="A. materno" />
                 </v-col>
+                <v-col cols="12" sm="12" md="3">
+                  <DataFile :val="data.avatar_b64" lab="Fotografía" img />
+                </v-col>
               </v-row>
             </v-card-text>
           </v-card>
@@ -243,8 +246,8 @@
                       <template v-slot:activator="{ on }">
                         <v-btn
                           v-on="on"
-                          text
-                          x-small
+                          icon
+                          small
                           @click.prevent="pwd_show = !pwd_show"
                         >
                           <v-icon small>
@@ -289,12 +292,14 @@ import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
 import DataVal from "@/components/DataVal.vue";
+import DataFile from "@/components/DataFile.vue";
 
 export default {
   components: {
     BtnBack,
     CardTitle,
     DataVal,
+    DataFile,
   },
   data() {
     return {

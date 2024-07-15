@@ -70,7 +70,34 @@
                       show-size
                       prepend-icon=""
                       accept="image/*"
-                    />
+                      :disabled="data.avatar_dlt"
+                    >
+                      <template v-slot:append>
+                        <div v-if="!store && data.avatar && !data.avatar_doc">
+                          <BtnDwd :val="data.avatar_b64" />
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                v-on="on"
+                                icon
+                                small
+                                :color="data.avatar_dlt ? 'error' : ''"
+                                @click.prevent="
+                                  data.avatar_dlt = !data.avatar_dlt
+                                "
+                              >
+                                <v-icon small>
+                                  mdi-delete{{ data.avatar_dlt ? "-off" : "" }}
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            <span>
+                              {{ data.avatar_dlt ? "NO " : "" }} Eliminar
+                            </span>
+                          </v-tooltip>
+                        </div>
+                      </template>
+                    </v-file-input>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -138,8 +165,8 @@
                           <template v-slot:activator="{ on }">
                             <v-btn
                               v-on="on"
-                              text
-                              x-small
+                              icon
+                              small
                               @click.prevent="pwd_show = !pwd_show"
                             >
                               <v-icon small>
@@ -181,24 +208,17 @@
 </template>
 
 <script>
-import {
-  API,
-  hdrs,
-  val,
-  err,
-  rules,
-  objAssign,
-  objDocs,
-  toFormData,
-} from "@/control";
+import { API, hdrs, val, err, rules, objAssign, toFormData } from "@/control";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
+import BtnDwd from "@/components/BtnDwd.vue";
 
 export default {
   components: {
     BtnBack,
     CardTitle,
+    BtnDwd,
   },
 
   data() {
@@ -236,7 +256,9 @@ export default {
           name: null,
           first_surname: null,
           second_surname: null,
+          avatar: null,
           avatar_doc: null,
+          avatar_dlt: false,
           nickname: null,
           email: null,
           password: null,

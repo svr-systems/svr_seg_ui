@@ -133,16 +133,34 @@ export const toFormData = (data) => {
   return form_data;
 };
 
-export const dateTimeNow = () => {
+export const b64ToBlob = (b64, ext) => {
+  const binary_string = window.atob(b64.replace(/\s/g, ""));
+  const len = binary_string.length;
+  let bytes = new Uint8Array(len);
+
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+
+  return new Blob([bytes.buffer], {
+    type: "application/" + ext,
+  });
+};
+
+export const dateTimeNow = (sprDate = "-", sprBwn = " ", sprTime = ":") => {
   let dt = new Date();
 
-  return `${dt.getFullYear().toString().padStart(4, "0")}-${(dt.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${dt.getDate().toString().padStart(2, "0")} ${dt
-    .getHours()
-    .toString()
-    .padStart(2, "0")}:${dt.getMinutes().toString().padStart(2, "0")}:${dt
-    .getSeconds()
-    .toString()
-    .padStart(2, "0")}`;
+  return (
+    dt.getFullYear().toString().padStart(4, "0") +
+    sprDate +
+    (dt.getMonth() + 1).toString().padStart(2, "0") +
+    sprDate +
+    dt.getDate().toString().padStart(2, "0") +
+    sprBwn +
+    dt.getHours().toString().padStart(2, "0") +
+    sprTime +
+    dt.getMinutes().toString().padStart(2, "0") +
+    sprTime +
+    dt.getSeconds().toString().padStart(2, "0")
+  );
 };
