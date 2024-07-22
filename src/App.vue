@@ -168,4 +168,8 @@ export default {
   margin-bottom: 16px !important;
   border-bottom: 0.5px solid rgba(126, 126, 126, 0.2);
 }
+
+.v-color-picker {
+  max-width: 100% !important;
+}
 </style>

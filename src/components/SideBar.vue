@@ -68,6 +68,12 @@ export default {
         show: true,
       },
       {
+        link: "tags",
+        title: "ETIQUETAS",
+        icon: "mdi-tag-multiple",
+        show: true,
+      },
+      {
         link: "users",
         title: "USUARIOS",
         icon: "mdi-account-multiple",

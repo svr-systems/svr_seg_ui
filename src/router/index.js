@@ -5,6 +5,53 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
+  //tags
+  {
+    path: "/etiquetas",
+    name: "tags",
+    component: () => import("@/views/tags/Index.vue"),
+    meta: {
+      title: "ETIQUETAS",
+      icon: "mdi-tag-multiple",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/etiquetas/agregar",
+    name: "tags.store",
+    component: () => import("@/views/tags/StoreUpdate.vue"),
+    meta: {
+      title: "ETIQUETA | AGREGAR",
+      icon: "mdi-tag",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/etiquetas/:id",
+    name: "tags.show",
+    component: () => import("@/views/tags/Show.vue"),
+    meta: {
+      title: "ETIQUETA",
+      icon: "mdi-tag",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/etiquetas/:id/editar",
+    name: "tags.update",
+    component: () => import("@/views/tags/StoreUpdate.vue"),
+    meta: {
+      title: "ETIQUETA | EDITAR",
+      icon: "mdi-tag",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
   //users
   {
     path: "/usuarios",
@@ -23,7 +70,7 @@ const routes = [
     component: () => import("@/views/users/StoreUpdate.vue"),
     meta: {
       title: "USUARIO | AGREGAR",
-      icon: "mdi-account-multiple",
+      icon: "mdi-account",
       req_auth: true,
       permission: true,
     },
@@ -34,7 +81,7 @@ const routes = [
     component: () => import("@/views/users/Show.vue"),
     meta: {
       title: "USUARIO",
-      icon: "mdi-account-multiple",
+      icon: "mdi-account",
       req_auth: true,
       permission: true,
     },
@@ -46,7 +93,7 @@ const routes = [
     component: () => import("@/views/users/StoreUpdate.vue"),
     meta: {
       title: "USUARIO | EDITAR",
-      icon: "mdi-account-multiple",
+      icon: "mdi-account",
       req_auth: true,
       permission: true,
     },
