@@ -68,6 +68,12 @@ export default {
         show: true,
       },
       {
+        link: "projects",
+        title: "Proyectos",
+        icon: "mdi-folder-multiple",
+        show: true,
+      },
+      {
         link: "tags",
         title: "ETIQUETAS",
         icon: "mdi-tag-multiple",

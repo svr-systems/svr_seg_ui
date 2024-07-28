@@ -14,8 +14,8 @@
         <v-col cols="4" class="text-right" />
       </v-row>
     </v-card-title>
-    <v-card-text v-if="data">
-      <v-form v-on:submit.prevent ref="data_form" lazy-validation>
+    <v-card-text v-if="item">
+      <v-form v-on:submit.prevent ref="item_form" lazy-validation>
         <v-row>
           <v-col cols="12">
             <v-card>
@@ -29,10 +29,11 @@
               </v-card-title>
               <v-card-text>
                 <v-row dense>
-                  <v-col cols="12" sm="12" md="6">
+                  <v-col cols="12" sm="12" md="12">
                     <v-text-field
-                      v-model="data.name"
+                      v-model="item.name"
                       label="Nombre"
+                      filled
                       dense
                       type="text"
                       :rules="rules.required"
@@ -40,9 +41,9 @@
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="6">
+                  <v-col cols="12" sm="12" md="12">
                     <v-color-picker
-                      v-model="data.color"
+                      v-model="item.color"
                       mode="hexa"
                       hide-canvas
                       hide-sliders
@@ -63,7 +64,7 @@
                     fab
                     x-small
                     :color="store ? 'success' : 'warning'"
-                    @click.prevent="dataHandle"
+                    @click.prevent="saveItem"
                   >
                     <v-icon small> mdi-check</v-icon>
                   </v-btn>
@@ -97,17 +98,17 @@ export default {
       log: this.$store.getters.getLog,
       ldg: true,
       store: true,
-      data: null,
+      item: null,
       rules: rules(),
     };
   },
 
   methods: {
-    getData() {
+    getItem() {
       this.store = this.id == null;
 
       if (this.store) {
-        this.data = {
+        this.item = {
           id: null,
           name: null,
           color: "#F44336",
@@ -117,7 +118,7 @@ export default {
         Axios.get(API + "/" + this.rte + "/" + this.id, hdrs(this.log.token))
           .then((rsp) => {
             rsp = val(rsp);
-            this.data = rsp.data;
+            this.item = rsp.item;
             this.ldg = false;
           })
           .catch((e) => {
@@ -126,8 +127,8 @@ export default {
       }
     },
 
-    dataHandle() {
-      if (this.$refs.data_form.validate()) {
+    saveItem() {
+      if (this.$refs.item_form.validate()) {
         this.$root
           .$confirm(
             "¿Confirma " + (this.store ? " agregar" : " editar") + " registro?"
@@ -136,7 +137,7 @@ export default {
             if (confirmed) {
               this.ldg = true;
 
-              let obj = objAssign(this.data, this.store);
+              let obj = objAssign(this.item, this.store);
 
               Axios.post(
                 API + "/" + this.rte + (this.store ? "" : "/" + obj.id),
@@ -154,7 +155,7 @@ export default {
                   if (rsp.ok) {
                     this.$router.push({
                       name: this.rte + ".show",
-                      params: { id: this.store ? rsp.data.id : this.id },
+                      params: { id: this.store ? rsp.item.id : this.id },
                     });
                   }
 
@@ -173,7 +174,7 @@ export default {
   },
 
   mounted() {
-    this.getData();
+    this.getItem();
   },
 };
 </script>

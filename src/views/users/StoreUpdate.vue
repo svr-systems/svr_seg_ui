@@ -33,6 +33,7 @@
                     <v-text-field
                       v-model="data.name"
                       label="Nombre"
+                      filled
                       dense
                       type="text"
                       :rules="rules.required"
@@ -44,6 +45,7 @@
                     <v-text-field
                       v-model="data.first_surname"
                       label="A. paterno"
+                      filled
                       dense
                       type="text"
                       :rules="rules.required"
@@ -55,6 +57,7 @@
                     <v-text-field
                       v-model="data.second_surname"
                       label="A. materno*"
+                      filled
                       dense
                       type="text"
                       maxlength="25"
@@ -65,11 +68,12 @@
                     <v-file-input
                       v-model="data.avatar_doc"
                       label="Fotografía (IMG)*"
+                      filled
                       dense
                       :rules="rules.fileLmtNR"
                       show-size
                       prepend-icon=""
-                      accept="image/*"
+                      accept=".jpg,.jpeg,.png,.webp,.svg,.bmp"
                       :disabled="data.avatar_dlt"
                     >
                       <template v-slot:append>
@@ -119,6 +123,7 @@
                     <v-select
                       v-model="data.role_id"
                       label="Rol"
+                      filled
                       dense
                       :rules="rules.required"
                       :items="roles"
@@ -131,6 +136,7 @@
                     <v-text-field
                       v-model="data.nickname"
                       label="Nom. usuario"
+                      filled
                       dense
                       type="text"
                       :rules="rules.nickname"
@@ -142,6 +148,7 @@
                     <v-text-field
                       v-model="data.email"
                       label="E-mail"
+                      filled
                       dense
                       type="text"
                       :rules="rules.email"
@@ -153,6 +160,7 @@
                     <v-text-field
                       v-model="data.password"
                       label="Contraseña"
+                      filled
                       dense
                       :type="pwd_show ? 'text' : 'password'"
                       :rules="rules.pwd"

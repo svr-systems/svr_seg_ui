@@ -18,22 +18,6 @@
                 icon
                 small
                 outlined
-                color="pink"
-                class="mr-1"
-                @click.prevent="pwdDlg"
-              >
-                <v-icon small> mdi-lock </v-icon>
-              </v-btn>
-            </template>
-            Contraseña
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                icon
-                small
-                outlined
                 color="info"
                 class="mr-1"
                 @click.prevent="reg_dlg = true"
@@ -82,43 +66,139 @@
                   <ItemVal :val="data.name" lab="Nombre" />
                 </v-col>
                 <v-col cols="12" sm="12" md="3">
-                  <ItemVal :val="data.first_surname" lab="A. paterno" />
+                  <ItemVal :val="data.start_date" lab="Inicio" />
                 </v-col>
                 <v-col cols="12" sm="12" md="3">
-                  <ItemVal :val="data.second_surname" lab="A. materno" />
+                  <ItemVal :val="data.end_date" lab="Termino" />
                 </v-col>
                 <v-col cols="12" sm="12" md="3">
-                  <DataFile :val="data.avatar_b64" lab="Fotografía" img />
+                  <DataFile :val="data.logo_b64" lab="Fotografía" img />
+                </v-col>
+                <v-col cols="12" sm="12" md="3">
+                  <ItemVal
+                    :val="data.state.name"
+                    :color="data.state.color"
+                    lab="Estado"
+                  />
+                </v-col>
+                <v-col cols="12" sm="12" md="3">
+                  <ItemVal
+                    :val="data.priority.name"
+                    :color="data.priority.color"
+                    lab="Prioridad"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <ItemVal :val="data.description" lab="Descripción" />
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12">
+
+        <v-col cols="12" sm="12" md="6">
           <v-card>
             <v-card-title class="card_title_border">
               <v-row dense>
                 <v-col cols="8">
-                  <CardTitle text="CUENTA" sub />
+                  <CardTitle text="MODULOS" sub />
                 </v-col>
                 <v-col cols="4" class="text-right" />
               </v-row>
             </v-card-title>
             <v-card-text>
               <v-row dense>
-                <v-col cols="12" sm="12" md="3">
-                  <ItemVal :val="data.role_name" lab="Rol" />
-                </v-col>
-                <v-col cols="12" sm="12" md="3">
-                  <ItemVal :val="data.nickname" lab="Nom. usuario" />
-                </v-col>
-                <v-col cols="12" sm="12" md="3">
-                  <ItemVal :val="data.email" lab="E-mail" />
+                <v-col cols="12">
+                  <v-simple-table dense>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Icono</th>
+                          <th>Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(project_module, i) in data.project_modules"
+                          :key="i"
+                        >
+                          <td style="width: 20px" v-text="i + 1" />
+                          <td style="width: 20px">
+                            <v-icon small>
+                              {{ project_module.icon }}
+                            </v-icon>
+                          </td>
+                          <td v-text="project_module.name" />
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-col>
+
+        <v-col cols="12" sm="12" md="6">
+          <v-card>
+            <v-card-title class="card_title_border">
+              <v-row dense>
+                <v-col cols="8">
+                  <CardTitle text="COLABORADORES" sub />
+                </v-col>
+                <v-col cols="4" class="text-right" />
+              </v-row>
+            </v-card-title>
+            <v-card-text>
+              <v-row dense>
+                <v-col cols="12">
+                  <v-simple-table dense>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Usuario</th>
+                          <th>Ver</th>
+                          <th>Editar</th>
+                          <th>Agregar</th>
+                          <th>Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(project_user, i) in data.project_users"
+                          :key="project_user.user.avatar"
+                        >
+                          <td style="width: 20px" v-text="i + 1" />
+                          <td>
+                            <Avatar
+                              :val="project_user.user.avatar_b64"
+                              :lab="project_user.user.nickname"
+                            />
+                          </td>
+                          <td>
+                            <DataCheck :val="project_user.read" />
+                          </td>
+                          <td>
+                            <DataCheck :val="project_user.update" />
+                          </td>
+                          <td>
+                            <DataCheck :val="project_user.create" />
+                          </td>
+                          <td>
+                            <DataCheck :val="project_user.delete" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+
         <v-col cols="12">
           <v-tooltip right>
             <template v-slot:activator="{ on }">
@@ -194,105 +274,18 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
-    <v-dialog
-      v-model="pwd_dlg"
-      persistent
-      overlay-color="black"
-      max-width="350"
-    >
-      <v-card flat :disabled="pwd_dlg_ldg" :loading="pwd_dlg_ldg">
-        <v-card-title class="card_title_border">
-          <v-row dense>
-            <v-col cols="6">
-              <CardTitle text="EDITAR" icon="mdi-lock" sub />
-            </v-col>
-            <v-col cols="6">
-              <div class="text-right">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      v-on="on"
-                      icon
-                      small
-                      color="primary"
-                      @click.prevent="pwdDlgClose"
-                    >
-                      <v-icon small> mdi-close </v-icon>
-                    </v-btn>
-                  </template>
-                  <span v-text="'Cerrar'" />
-                </v-tooltip>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-card-text v-if="pwd">
-          <v-form v-on:submit.prevent ref="pwd_form" lazy-validation>
-            <v-row dense>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="pwd.password"
-                  label="Contraseña"
-                  dense
-                  :type="pwd_show ? 'text' : 'password'"
-                  :rules="rules.pwd"
-                  maxlength="15"
-                  counter
-                  autocomplete="new-password"
-                >
-                  <template v-slot:append>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          v-on="on"
-                          icon
-                          small
-                          @click.prevent="pwd_show = !pwd_show"
-                        >
-                          <v-icon small>
-                            mdi-eye{{ pwd_show ? "" : "-off" }}
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span> {{ pwd_show ? "Ocultar" : "Mostrar" }} </span>
-                    </v-tooltip>
-                  </template>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <div class="text-right">
-                  <v-tooltip left>
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-on="on"
-                        fab
-                        x-small
-                        color="pink"
-                        @click.prevent="pwdHandle"
-                      >
-                        <v-icon small> mdi-check</v-icon>
-                      </v-btn>
-                    </template>
-                    <span> Confirmar </span>
-                  </v-tooltip>
-                </div>
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import { API, hdrs, val, err, rules } from "@/control";
+import { API, hdrs, val, err } from "@/control";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
 import ItemVal from "@/components/ItemVal.vue";
 import DataFile from "@/components/DataFile.vue";
+import Avatar from "@/components/Avatar.vue";
+import DataCheck from "@/components/DataCheck.vue";
 
 export default {
   components: {
@@ -300,22 +293,17 @@ export default {
     CardTitle,
     ItemVal,
     DataFile,
+    Avatar,
+    DataCheck,
   },
   data() {
     return {
-      rte: "users",
+      rte: "projects",
       id: this.$route.params.id ? this.$route.params.id : null,
       log: this.$store.getters.getLog,
       ldg: true,
       data: null,
       reg_dlg: false,
-      rules: rules(),
-      //DIALOGS
-      pwd: null,
-      pwd_dlg: false,
-      pwd_dlg_ldg: false,
-      //OTHERS
-      pwd_show: false,
     };
   },
   methods: {
@@ -363,59 +351,6 @@ export default {
             });
         }
       });
-    },
-
-    pwdDlg() {
-      this.pwd_show = false;
-      this.pwd = {
-        id: this.data.id,
-        password: null,
-      };
-      this.pwd_dlg_ldg = false;
-      this.pwd_dlg = true;
-    },
-
-    pwdDlgClose() {
-      this.pwd_dlg = false;
-      this.$refs.pwd_form.reset();
-    },
-
-    pwdHandle() {
-      if (this.$refs.pwd_form.validate()) {
-        this.$root
-          .$confirm("¿Confirma actualizar contraseña?")
-          .then((confirmed) => {
-            if (confirmed) {
-              this.pwd_dlg_ldg = true;
-
-              Axios.post(
-                API + "/" + this.rte + "/pwd_update",
-                this.pwd,
-                hdrs(this.log.token)
-              )
-                .then((rsp) => {
-                  rsp = val(rsp);
-
-                  this.$root.$alert(
-                    rsp.ok ? "success" : "error",
-                    rsp.ok ? rsp.msg : err(rsp)
-                  );
-
-                  if (rsp.ok) {
-                    this.pwdDlgClose();
-                    this.getData();
-                  }
-
-                  this.pwd_dlg_ldg = false;
-                })
-                .catch((e) => {
-                  this.$root.$alert("error", err(e));
-                });
-            }
-          });
-      } else {
-        this.$root.$alert("error", "Revisa los detalles señalados");
-      }
     },
   },
   mounted() {

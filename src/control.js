@@ -47,6 +47,10 @@ export const err = (e) => {
 export const rules = () => {
   return {
     required: [(v) => !!v || "Campo requerido."],
+    requiredTxt: [
+      (v) => !!v || "Campo requerido.",
+      (v) => (v && v.trim().length >= 2) || "Mínimo 2 caracteres.",
+    ],
     nickname: [
       (v) => !!v || "Campo requerido.",
       (v) =>

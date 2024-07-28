@@ -5,6 +5,53 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
+  //projects
+  {
+    path: "/proyectos",
+    name: "projects",
+    component: () => import("@/views/projects/Index.vue"),
+    meta: {
+      title: "PROYECTOS",
+      icon: "mdi-folder-multiple",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/proyectos/agregar",
+    name: "projects.store",
+    component: () => import("@/views/projects/StoreUpdate.vue"),
+    meta: {
+      title: "PROYECTO | AGREGAR",
+      icon: "mdi-folder",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/proyectos/:id",
+    name: "projects.show",
+    component: () => import("@/views/projects/Show.vue"),
+    meta: {
+      title: "PROYECTO",
+      icon: "mdi-folder",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/proyectos/:id/editar",
+    name: "projects.update",
+    component: () => import("@/views/projects/StoreUpdate.vue"),
+    meta: {
+      title: "PROYECTO | EDITAR",
+      icon: "mdi-folder",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
   //tags
   {
     path: "/etiquetas",

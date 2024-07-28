@@ -48,7 +48,7 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text v-if="data">
+    <v-card-text v-if="item">
       <v-row>
         <v-col cols="12">
           <v-card>
@@ -62,11 +62,11 @@
             </v-card-title>
             <v-card-text>
               <v-row dense>
-                <v-col cols="12" sm="12" md="6">
-                  <DataVal :val="data.name" lab="Nombre" />
+                <v-col cols="12" sm="12" md="12">
+                  <ItemVal :val="item.name" lab="Nombre" />
                 </v-col>
-                <v-col cols="12" sm="12" md="6">
-                  <DataVal :val="data.color" lab="Color" color />
+                <v-col cols="12" sm="12" md="12">
+                  <ItemVal :val="item.color" :color="item.color" lab="Color" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -81,7 +81,7 @@
                 small
                 outlined
                 color="error"
-                @click.prevent="dataDelete"
+                @click.prevent="itemDelete"
               >
                 <v-icon small> mdi-delete </v-icon>
               </v-btn>
@@ -124,22 +124,22 @@
             </v-col>
           </v-row>
         </v-card-title>
-        <v-card-text v-if="reg_dlg && data">
+        <v-card-text v-if="reg_dlg && item">
           <v-row dense>
             <v-col cols="12">
-              <DataVal :val="data.id" lab="ID" />
+              <ItemVal :val="item.id" lab="ID" />
             </v-col>
             <v-col cols="6">
-              <DataVal
-                :val="data.created_by.name"
-                :sub="data.created_at"
+              <ItemVal
+                :val="item.created_by.name"
+                :sub="item.created_at"
                 lab="Creación"
               />
             </v-col>
             <v-col cols="6">
-              <DataVal
-                :val="data.updated_by.name"
-                :sub="data.updated_at"
+              <ItemVal
+                :val="item.updated_by.name"
+                :sub="item.updated_at"
                 lab="Últ. edición"
               />
             </v-col>
@@ -155,13 +155,13 @@ import { API, hdrs, val, err } from "@/control";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
-import DataVal from "@/components/DataVal.vue";
+import ItemVal from "@/components/ItemVal.vue";
 
 export default {
   components: {
     BtnBack,
     CardTitle,
-    DataVal,
+    ItemVal,
   },
   data() {
     return {
@@ -169,18 +169,18 @@ export default {
       id: this.$route.params.id ? this.$route.params.id : null,
       log: this.$store.getters.getLog,
       ldg: true,
-      data: null,
+      item: null,
       reg_dlg: false,
     };
   },
   methods: {
-    getData() {
+    getItem() {
       this.ldg = true;
 
       Axios.get(API + "/" + this.rte + "/" + this.id, hdrs(this.log.token))
         .then((rsp) => {
           rsp = val(rsp);
-          this.data = rsp.data;
+          this.item = rsp.item;
           this.ldg = false;
         })
         .catch((e) => {
@@ -188,13 +188,13 @@ export default {
         });
     },
 
-    dataDelete() {
+    itemDelete() {
       this.$root.$confirm("¿Confirma eliminar registro?").then((confirmed) => {
         if (confirmed) {
           this.ldg = true;
 
           Axios.delete(
-            API + "/" + this.rte + "/" + this.data.id,
+            API + "/" + this.rte + "/" + this.item.id,
             hdrs(this.log.token)
           )
             .then((rsp) => {
@@ -221,7 +221,7 @@ export default {
     },
   },
   mounted() {
-    this.getData();
+    this.getItem();
   },
 };
 </script>

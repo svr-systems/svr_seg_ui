@@ -57,8 +57,20 @@
             <template v-slot:item.key="{ item }">
               <b v-text="item.key + 1" />
             </template>
-            <template v-slot:item.name="{ item }">
-              <ItemVal :val="item.name" :color="item.color" />
+            <template v-slot:item.logo="{ item }">
+              <Avatar :val="item.logo_b64" icon="folder" />
+            </template>
+            <template v-slot:item.state.name="{ item }">
+              <ItemVal :val="item.state.name" :color="item.state.color" />
+            </template>
+            <template v-slot:item.priority.name="{ item }">
+              <ItemVal :val="item.priority.name" :color="item.priority.color" />
+            </template>
+            <template v-slot:item.user_property.nickname="{ item }">
+              <Avatar
+                :val="item.user_property.avatar_b64"
+                :lab="item.user_property.nickname"
+              />
             </template>
             <template v-slot:item.action="{ item }">
               <div class="text-right">
@@ -92,16 +104,18 @@
 import { API, hdrs, val, err } from "@/control";
 import Axios from "axios";
 import CardTitle from "@/components/CardTitle.vue";
+import Avatar from "@/components/Avatar.vue";
 import ItemVal from "@/components/ItemVal.vue";
 
 export default {
   components: {
     CardTitle,
+    Avatar,
     ItemVal,
   },
   data() {
     return {
-      rte: "tags",
+      rte: "projects",
       log: this.$store.getters.getLog,
       ldg: false,
       tbl: [],
@@ -111,14 +125,14 @@ export default {
     };
   },
   methods: {
-    getItems() {
+    getTbl() {
       this.ldg = true;
       this.tbl = [];
 
       Axios.get(API + "/" + this.rte, hdrs(this.log.token))
         .then((rsp) => {
           rsp = val(rsp);
-          this.tbl = rsp.items;
+          this.tbl = rsp.data;
           this.ldg = false;
         })
         .catch((e) => {
@@ -135,8 +149,40 @@ export default {
         width: "60",
       },
       {
+        value: "logo",
+        text: "",
+        filterable: false,
+        width: "22",
+        sortable: false,
+      },
+      {
         value: "name",
         text: "Nombre",
+        filterable: true,
+      },
+      {
+        value: "start_date",
+        text: "Inicio",
+        filterable: true,
+      },
+      {
+        value: "end_date",
+        text: "Termino",
+        filterable: true,
+      },
+      {
+        value: "state.name",
+        text: "Estado",
+        filterable: true,
+      },
+      {
+        value: "priority.name",
+        text: "prioridad",
+        filterable: true,
+      },
+      {
+        value: "user_property.nickname",
+        text: "Propietario",
         filterable: true,
       },
       {
@@ -148,7 +194,7 @@ export default {
       },
     ];
 
-    this.getItems();
+    this.getTbl();
   },
 };
 </script>

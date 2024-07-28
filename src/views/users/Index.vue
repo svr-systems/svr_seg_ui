@@ -57,6 +57,9 @@
             <template v-slot:item.key="{ item }">
               <b v-text="item.key + 1" />
             </template>
+            <template v-slot:item.avatar="{ item }">
+              <Avatar :val="item.avatar_b64" />
+            </template>
             <template v-slot:item.action="{ item }">
               <div class="text-right">
                 <v-tooltip v-if="true" left>
@@ -89,10 +92,12 @@
 import { API, hdrs, val, err } from "@/control";
 import Axios from "axios";
 import CardTitle from "@/components/CardTitle.vue";
+import Avatar from "@/components/Avatar.vue";
 
 export default {
   components: {
     CardTitle,
+    Avatar,
   },
   data() {
     return {
@@ -131,6 +136,13 @@ export default {
         text: "#",
         filterable: false,
         width: "60",
+      },
+      {
+        value: "avatar",
+        text: "",
+        filterable: false,
+        width: "22",
+        sortable: false,
       },
       {
         value: "full_name",

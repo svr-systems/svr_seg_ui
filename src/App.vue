@@ -79,7 +79,7 @@ export default {
 
   data() {
     return {
-      version: "v1.24.07.14",
+      version: "v1.24.07.27",
       title: "SVR-SEG",
       drawer: false,
       log_ldg: false,
